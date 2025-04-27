@@ -56,15 +56,21 @@ describe('ProductService', () => {
     });
 
     it('Should NOT create a Product with empty data', async () => {
-      expect(await productService.create(mockedEmptyProduct)).toThrow(BadRequestException)
+      expect(await productService.create(mockedEmptyProduct)).toThrow(
+        BadRequestException,
+      );
     });
 
     it('Should NOT create a Product with wrongly typed data', async () => {
-      expect(await productService.create(mockedWrongTypedProduct)).toThrow(BadRequestException)
+      expect(await productService.create(mockedWrongTypedProduct)).toThrow(
+        BadRequestException,
+      );
     });
 
     it('Should NOT create a Product with unexistent category', async () => {
-      expect(await productService.create(mockedNonexistentCategoryProduct)).toThrow(NotFoundException)
+      expect(
+        await productService.create(mockedNonexistentCategoryProduct),
+      ).toThrow(NotFoundException);
     });
   });
 
