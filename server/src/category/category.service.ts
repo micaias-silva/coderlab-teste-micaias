@@ -15,11 +15,11 @@ export class CategoryService {
       where: { name: { in: categories, mode: 'insensitive' } },
     });
 
-    const foundMatchesRequested: boolean = foundCategories.every((item) =>
-      categories.includes(item.name),
-    );
-    if (!foundCategories) {
-      throw new NotFoundException("Some of requested categries were not found");
+    const foundMatchesRequested: boolean =
+      foundCategories.length == categories.length &&
+      foundCategories.every((item) => categories.includes(item.name));
+    if (!foundMatchesRequested) {
+      throw new NotFoundException('Some of requested categries were not found');
     }
 
     return foundCategories;
