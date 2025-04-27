@@ -54,11 +54,38 @@ export class ProductService {
     return product;
   }
 
-  update(id: string, updateProductDto: UpdateProductDto): any {
-    return {}
+  async update(id: string, updateProductDto: UpdateProductDto) {
+    const productToUpdate = await this.findOne(id);
+    const upcomingCategories = updateProductDto.categories || null;
+    const categoriesWillUpdate = upcomingCategories != null;
+    let newCategories: { categoryId: string }[] = [];
+
+    if (categoriesWillUpdate) {
+      const matchCategories =
+        await this.categoryService.findAllOfManyCategories(upcomingCategories);
+
+      await this.databaseService.productInCategory.deleteMany({
+        where: { productId: productToUpdate.id },
+      });
+
+      newCategories = matchCategories.map((item) => {
+        return { categoryId: item.id };
+      });
+    }
+
+    const updatedProduct = await this.databaseService.product.update({
+      where: { id },
+      data: {
+        ...updateProductDto,
+        categories: categoriesWillUpdate ? {create: newCategories} : undefined
+      },
+      include: {categories: {include: {category: true}}}
+    });
+
+    return updatedProduct
   }
 
   remove(id: string): any {
-    return {}
+    return {};
   }
 }
