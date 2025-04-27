@@ -35,8 +35,8 @@ export class ProductService {
     return createdProduct;
   }
 
-  findAll() {
-    return `This action returns all product`;
+  async findAll() {
+    return await this.databaseService.product.findMany();
   }
 
   findOne(id: string): any {
