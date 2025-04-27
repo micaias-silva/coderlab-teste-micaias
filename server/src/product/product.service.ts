@@ -39,8 +39,19 @@ export class ProductService {
     return await this.databaseService.product.findMany();
   }
 
-  findOne(id: string): any {
-    return {}
+  async findOne(id: string) {
+    const product = await this.databaseService.product.findFirst({
+      where: { id },
+      include: {
+        categories: { include: { category: { include: { parent: true } } } },
+      },
+    });
+
+    if (!product) {
+      throw new NotFoundException();
+    }
+
+    return product;
   }
 
   update(id: string, updateProductDto: UpdateProductDto): any {
