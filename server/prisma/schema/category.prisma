@@ -2,9 +2,10 @@
 model Category {
     id String @db.Uuid @default(uuid()) @id
     name String @unique
-    parentId String?
+    parentId String? @db.Uuid
     parent Category? @relation("parent", fields: [parentId] , references: [id], onDelete: Cascade)
     children Category[] @relation("parent")
+    relatedProducts productInCategory[]
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
 }
