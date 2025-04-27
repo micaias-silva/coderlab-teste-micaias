@@ -1,0 +1,6 @@
+model productInCategory {
+    productId String @db.Uuid
+    categoryId String @db.Uuid
+
+    @@id([productId, categoryId])
+}
