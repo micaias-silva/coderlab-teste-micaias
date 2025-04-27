@@ -18,7 +18,7 @@ export class ProductService {
     const matchCategories =
       await this.categoryService.findAllOfManyCategories(incomingCategories);
 
-    const createdProduct = this.databaseService.product.create({
+    const createdProduct = await this.databaseService.product.create({
       data: {
         ...createProductDto,
         categories: {
@@ -85,7 +85,8 @@ export class ProductService {
     return updatedProduct
   }
 
-  remove(id: string): any {
-    return {};
+  async remove(id: string) {
+    await this.findOne(id)
+    await this.databaseService.product.delete({where: {id}})
   }
 }
