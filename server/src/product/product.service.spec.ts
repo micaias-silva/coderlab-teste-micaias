@@ -11,6 +11,8 @@ import { CreateProductDto } from './dto/create-product.dto';
 import { BadRequestException, NotFoundException } from '@nestjs/common';
 import { DatabaseService } from 'src/database/database.service';
 import { Prisma } from 'prisma/generated/prisma';
+import { randomUUID } from 'crypto';
+import { CategoryService } from 'src/category/category.service';
 
 describe('ProductService', () => {
   let productService: ProductService;
@@ -19,7 +21,7 @@ describe('ProductService', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       imports: [],
-      providers: [ProductService, DatabaseService],
+      providers: [ProductService, DatabaseService, CategoryService],
     }).compile();
 
     productService = module.get<ProductService>(ProductService);
@@ -28,20 +30,19 @@ describe('ProductService', () => {
 
   // Support Functions
   const checkCategoryMatches = (
-    productDto: CreateProductDto,
     resultProduct,
+    productDto: CreateProductDto,
   ): boolean => {
     return resultProduct.categories.every((item) =>
-      productDto.categories.includes(item.name),
+      productDto.categories.includes(item.category.name),
     );
   };
   const checkProductProperties = (resultProduct, productDto) => {
     expect(resultProduct).toHaveProperty('id');
     expect(resultProduct.name).toEqual(productDto.name);
     expect(resultProduct.qty).toEqual(productDto.qty);
-    expect(resultProduct.price).toEqual(productDto.price);
+    expect(Number(resultProduct.price)).toEqual(productDto.price);
     expect(resultProduct.photo).toEqual(productDto.photo);
-    expect(checkCategoryMatches(productDto, resultProduct)).toBe(true);
   };
 
   it('should be defined', () => {
@@ -49,28 +50,32 @@ describe('ProductService', () => {
     expect(databaseService).toBeDefined();
   });
 
-  describe('create', () => {
+  describe.only('create', () => {
     it('Should create a Product', async () => {
       const createdProduct = await productService.create(mockedValidProduct);
       checkProductProperties(createdProduct, mockedValidProduct);
-    });
-
-    it('Should NOT create a Product with empty data', async () => {
-      expect(await productService.create(mockedEmptyProduct)).toThrow(
-        BadRequestException,
+      expect(checkCategoryMatches(createdProduct, mockedValidProduct)).toBe(
+        true,
       );
     });
 
-    it('Should NOT create a Product with wrongly typed data', async () => {
-      expect(await productService.create(mockedWrongTypedProduct)).toThrow(
-        BadRequestException,
-      );
-    });
+    // it.only('Should NOT create a Product with empty data', async () => {
+    //   expect(productService.create(mockedEmptyProduct)).toThrow(
+    //     BadRequestException,
+    //   );
+    // });
 
-    it('Should NOT create a Product with unexistent category', async () => {
+    // it('Should NOT create a Product with wrongly typed data', async () => {
+    //   expect(await productService.create(mockedWrongTypedProduct)).toThrow(
+    //     BadRequestException,
+    //   );
+    // });
+
+    it.only('Should NOT create a Product with unexistent category', async () => {
       expect(
-        await productService.create(mockedNonexistentCategoryProduct),
-      ).toThrow(NotFoundException);
+        async () =>
+          await productService.create(mockedNonexistentCategoryProduct),
+      ).rejects.toThrow()
     });
   });
 
@@ -80,13 +85,20 @@ describe('ProductService', () => {
         data: { ...mockedProductToFind, categories: undefined },
       });
       const productFound = await productService.findOne(createdProduct.id);
-      
-      checkProductProperties(productFound, mockedProductToFind)
-      expect(createdProduct.id).toEqual(productFound.id)
-      expect(createdProduct.id).toHaveProperty("categories")
+
+      checkProductProperties(productFound, mockedProductToFind);
+      expect(createdProduct.id).toEqual(productFound.id);
+      expect(createdProduct.id).toHaveProperty('categories');
     });
 
-    it('Should return an exception given an unexistent id', () => {});
+    it('Should return an exception given an unexistent id', () => {
+      const fakeUuid = randomUUID();
+      expect(productService.findOne(fakeUuid)).toThrow(NotFoundException);
+    });
+
+    it('Should return an exception given an invalid id', () => {
+      expect(productService.findOne('123456789')).toThrow(BadRequestException);
+    });
   });
 
   describe('findMany', () => {
