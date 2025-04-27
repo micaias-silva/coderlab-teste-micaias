@@ -31,15 +31,17 @@ describe('ProductService', () => {
     productDto: CreateProductDto,
     resultProduct,
   ): boolean => {
-    return resultProduct.categories.every((item) => productDto.categories.includes(item.name))
+    return resultProduct.categories.every((item) =>
+      productDto.categories.includes(item.name),
+    );
   };
-  const checkProductProperties = (resultProduct) => {
+  const checkProductProperties = (resultProduct, productDto) => {
     expect(resultProduct).toHaveProperty('id');
-    expect(resultProduct.name).toEqual(mockedValidProduct.name);
-    expect(resultProduct.qty).toEqual(mockedValidProduct.qty);
-    expect(resultProduct.price).toEqual(mockedValidProduct.price);
-    expect(resultProduct.photo).toEqual(mockedValidProduct.photo);
-    expect(checkCategoryMatches(mockedValidProduct, resultProduct)).toBe(true)
+    expect(resultProduct.name).toEqual(productDto.name);
+    expect(resultProduct.qty).toEqual(productDto.qty);
+    expect(resultProduct.price).toEqual(productDto.price);
+    expect(resultProduct.photo).toEqual(productDto.photo);
+    expect(checkCategoryMatches(productDto, resultProduct)).toBe(true);
   };
 
   it('should be defined', () => {
