@@ -1,1 +1,8 @@
-export class CreateProductDto {}
+export class CreateProductDto {
+    name: string
+    qty: number
+    price: number
+    categories: string[]
+    photo: string
+}
+
