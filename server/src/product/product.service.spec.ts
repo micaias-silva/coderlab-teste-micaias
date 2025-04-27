@@ -75,7 +75,16 @@ describe('ProductService', () => {
   });
 
   describe('findOne', () => {
-    it('Should retrieve a specific product given its id', () => {});
+    it('Should retrieve a specific product given its id', async () => {
+      const createdProduct = await databaseService.product.create({
+        data: { ...mockedProductToFind, categories: undefined },
+      });
+      const productFound = await productService.findOne(createdProduct.id);
+      
+      checkProductProperties(productFound, mockedProductToFind)
+      expect(createdProduct.id).toEqual(productFound.id)
+      expect(createdProduct.id).toHaveProperty("categories")
+    });
 
     it('Should return an exception given an unexistent id', () => {});
   });
