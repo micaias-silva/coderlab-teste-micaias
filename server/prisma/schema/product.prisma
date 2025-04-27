@@ -1,0 +1,9 @@
+model Product {
+    id String @db.Uuid @default(uuid()) @id
+    name String
+    qty Int
+    price Decimal
+    photo String
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}
