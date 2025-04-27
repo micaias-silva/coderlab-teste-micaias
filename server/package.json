@@ -62,7 +62,11 @@
       "json",
       "ts"
     ],
-    "rootDir": "src",
+    "moduleNameMapper": {
+      "prisma/(.*)": "<rootDir>/prisma/$1",
+      "src/(.*)$": "<rootDir>/src/$1"
+    },
+    "rootDir": "./",
     "testRegex": ".*\\.spec\\.ts$",
     "transform": {
       "^.+\\.(t|j)s$": "ts-jest"
