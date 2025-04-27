@@ -1,8 +1,16 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { ProductService } from './product.service';
-import { mockedEmptyProduct, mockedNonexistentCategoryProduct, mockedValidProduct, mockedWrongTypedProduct } from './mocks';
+import {
+  mockedEmptyProduct,
+  mockedNonexistentCategoryProduct,
+  mockedProductToFind,
+  mockedValidProduct,
+  mockedWrongTypedProduct,
+} from './mocks';
 import { CreateProductDto } from './dto/create-product.dto';
 import { BadRequestException, NotFoundException } from '@nestjs/common';
+import { DatabaseService } from 'src/database/database.service';
+import { Prisma } from 'prisma/generated/prisma';
 
 describe('ProductService', () => {
   let productService: ProductService;
