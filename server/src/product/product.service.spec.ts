@@ -14,14 +14,16 @@ import { Prisma } from 'prisma/generated/prisma';
 
 describe('ProductService', () => {
   let productService: ProductService;
+  let databaseService: DatabaseService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       imports: [],
-      providers: [ProductService],
+      providers: [ProductService, DatabaseService],
     }).compile();
 
     productService = module.get<ProductService>(ProductService);
+    databaseService = module.get<DatabaseService>(DatabaseService);
   });
 
   // Support Functions
