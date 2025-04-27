@@ -59,19 +59,19 @@ describe('ProductService', () => {
       );
     });
 
-    // it.only('Should NOT create a Product with empty data', async () => {
-    //   expect(productService.create(mockedEmptyProduct)).toThrow(
-    //     BadRequestException,
-    //   );
-    // });
+    it('Should NOT create a Product with empty data', async () => {
+      expect(async () => await productService.create(mockedEmptyProduct)).rejects.toThrow(
+        BadRequestException,
+      );
+    });
 
-    // it('Should NOT create a Product with wrongly typed data', async () => {
-    //   expect(await productService.create(mockedWrongTypedProduct)).toThrow(
-    //     BadRequestException,
-    //   );
-    // });
+    it('Should NOT create a Product with wrongly typed data', async () => {
+      expect(async () => await productService.create(mockedWrongTypedProduct)).rejects.toThrow(
+        BadRequestException,
+      );
+    });
 
-    it.only('Should NOT create a Product with unexistent category', async () => {
+    it('Should NOT create a Product with unexistent category', async () => {
       expect(
         async () =>
           await productService.create(mockedNonexistentCategoryProduct),
@@ -91,13 +91,13 @@ describe('ProductService', () => {
       expect(createdProduct.id).toHaveProperty('categories');
     });
 
-    it('Should return an exception given an unexistent id', () => {
+    it('Should return an exception given an unexistent id', async () => {
       const fakeUuid = randomUUID();
-      expect(productService.findOne(fakeUuid)).toThrow(NotFoundException);
+      expect(async () => await productService.findOne(fakeUuid)).rejects.toThrow(NotFoundException);
     });
 
-    it('Should return an exception given an invalid id', () => {
-      expect(productService.findOne('123456789')).toThrow(BadRequestException);
+    it('Should return an exception given an invalid id', async () => {
+      expect(async () => await productService.findOne('123456789')).rejects.toThrow(BadRequestException);
     });
   });
 
