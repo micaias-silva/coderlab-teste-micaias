@@ -1,19 +1,22 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { ProductService } from './product.service';
+import { mockedValidProduct } from './mocks';
+import { CreateProductDto } from './dto/create-product.dto';
 
 describe('ProductService', () => {
-  let service: ProductService;
+  let productService: ProductService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
+      imports: [],
       providers: [ProductService],
     }).compile();
 
-    service = module.get<ProductService>(ProductService);
+    productService = module.get<ProductService>(ProductService);
   });
 
   it('should be defined', () => {
-    expect(service).toBeDefined();
+    expect(productService).toBeDefined();
   });
 
   describe('create', () => {
