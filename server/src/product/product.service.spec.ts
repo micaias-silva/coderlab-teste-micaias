@@ -46,6 +46,7 @@ describe('ProductService', () => {
 
   it('should be defined', () => {
     expect(productService).toBeDefined();
+    expect(databaseService).toBeDefined();
   });
 
   describe('create', () => {
