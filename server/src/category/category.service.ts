@@ -5,7 +5,7 @@ import { DatabaseService } from 'src/database/database.service';
 export class CategoryService {
     constructor(private databaseService: DatabaseService) {}
     async findAll() {
-        return await this.databaseService.category.findMany()
+        return await this.databaseService.category.findMany({include: {parent: true}})
     }
 }
 
