@@ -52,7 +52,7 @@ describe('ProductService', () => {
   describe('create', () => {
     it('Should create a Product', async () => {
       const createdProduct = await productService.create(mockedValidProduct);
-      checkProductProperties(createdProduct);
+      checkProductProperties(createdProduct, mockedValidProduct);
     });
 
     it('Should NOT create a Product with empty data', async () => {
