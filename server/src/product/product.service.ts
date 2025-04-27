@@ -1,4 +1,7 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { DatabaseService } from 'src/database/database.service';
@@ -24,10 +27,12 @@ export class ProductService {
           }),
         },
       },
-      include: {categories: {include: {category: {include: {parent: true}}}}}
+      include: {
+        categories: { include: { category: { include: { parent: true } } } },
+      },
     });
 
-    return createdProduct
+    return createdProduct;
   }
 
   findAll() {
