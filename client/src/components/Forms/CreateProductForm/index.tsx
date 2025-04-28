@@ -1,25 +1,31 @@
 import { useForm } from "react-hook-form";
-import { CreateProduct } from "../../../interfaces/axios.interfaces";
 import { productApi } from "../../../utils/axios";
 import { useState } from "react";
+import InputCategory from "../InputCategory";
+import { yupResolver } from "@hookform/resolvers/yup";
+import createProductSchema from "./form.schema";
+import * as yup from "yup"
+
+type CreateFormValues = yup.InferType<typeof createProductSchema>
 
 export function CreateProductForm() {
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<CreateProduct>({
+  } = useForm({
     defaultValues: {
       name: "",
       qty: 0,
       price: 0,
       photo: "",
     },
+    resolver: yupResolver(createProductSchema)
   });
 
   const [categories, setCategories] = useState<string[]>([])
 
-  const onSubmit = (data: CreateProduct) => {
+  const onSubmit = (data: CreateFormValues) => {
     productApi
       .post("/", { ...data, categories })
       .then(() => console.log("success"))
