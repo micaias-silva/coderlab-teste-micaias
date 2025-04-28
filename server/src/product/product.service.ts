@@ -43,6 +43,7 @@ export class ProductService {
     const navigation = await this.databaseService.product.findMany({
       skip: skip,
       take: itemCount,
+      include: {categories: {include: {category: {include: {parent: true}}}}}
     });
 
     const nextPage = page < pageCount ? page + 1 : null
