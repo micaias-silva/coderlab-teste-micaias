@@ -1,7 +1,4 @@
-import {
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { DatabaseService } from 'src/database/database.service';
@@ -34,9 +31,27 @@ export class ProductService {
 
     return createdProduct;
   }
+  async findAll(page: number, itemCount: number) {
+    const productsCount = await this.databaseService.product.count();
+    const pageCount = Math.ceil(productsCount / itemCount);
+    
+    page = page - 1 < 0 ? 0 : page -1
 
-  async findAll() {
-    return await this.databaseService.product.findMany();
+    const navigation = await this.databaseService.product.findMany({
+      skip: page * itemCount,
+      take: itemCount,
+    });
+
+    const nextPage = page + 1 <= pageCount ? page + 1 : null
+    const previousPage = page - 1 >= 0 ? page -1 : null
+
+
+    return { page,
+      previousPage,
+      nextPage,
+      navigation,
+      pageCount
+     };
   }
 
   async findOne(id: string) {
@@ -77,16 +92,18 @@ export class ProductService {
       where: { id },
       data: {
         ...updateProductDto,
-        categories: categoriesWillUpdate ? {create: newCategories} : undefined
+        categories: categoriesWillUpdate
+          ? { create: newCategories }
+          : undefined,
       },
-      include: {categories: {include: {category: true}}}
+      include: { categories: { include: { category: true } } },
     });
 
-    return updatedProduct
+    return updatedProduct;
   }
 
   async remove(id: string) {
-    await this.findOne(id)
-    await this.databaseService.product.delete({where: {id}})
+    await this.findOne(id);
+    await this.databaseService.product.delete({ where: { id } });
   }
 }
