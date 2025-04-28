@@ -70,6 +70,10 @@ export function CreateProductForm() {
         {errors.photo && <p>{errors.photo.message}</p>}
       </div>
 
+      <div>
+        <InputCategory setCategoriesState={setCategories} {...register("categories")}/>
+      </div>
+      {errors.categories && <p>{errors.categories.message}</p>}
       <button type="submit">Create Product</button>
     </form>
   );
