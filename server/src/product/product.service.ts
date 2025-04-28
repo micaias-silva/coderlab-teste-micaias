@@ -33,22 +33,26 @@ export class ProductService {
   }
   async findAll(page: number, itemCount: number) {
     const productsCount = await this.databaseService.product.count();
+
     const pageCount = Math.ceil(productsCount / itemCount);
+
+    page = Math.max(1, Math.min(page, pageCount))
     
-    page = page - 1 < 0 ? 0 : page -1
+    const skip = (page - 1) * itemCount
 
     const navigation = await this.databaseService.product.findMany({
-      skip: page * itemCount,
+      skip: skip,
       take: itemCount,
     });
 
-    const nextPage = page + 1 <= pageCount ? page + 1 : null
-    const previousPage = page - 1 >= 0 ? page -1 : null
+    const nextPage = page < pageCount ? page + 1 : null
+    const previousPage = page - 1 > 0 ? page -1 : null
 
 
-    return { page,
+    return { currentPage: page,
       previousPage,
       nextPage,
+      items: navigation.length,
       navigation,
       pageCount
      };
