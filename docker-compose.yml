@@ -23,5 +23,13 @@ services:
       - .:/app:rw
 
     command: ["sh", "-c", "npx prisma migrate deploy && npm run start:dev"]
+  
+  frontend_client:
+    container_name: micaias_frontend_client
+    build: ./client
+    image: frontend_client
+    ports:
+      - 3001:5173
 
-    
+    volumes:
+      - .:/app
