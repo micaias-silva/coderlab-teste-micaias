@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { DatabaseService } from 'src/database/database.service';
@@ -15,7 +15,7 @@ export class ProductService {
     const matchCategories =
       await this.categoryService.findAllOfManyCategories(incomingCategories);
 
-    const createdProduct = this.databaseService.product.create({
+    const createdProduct = await this.databaseService.product.create({
       data: {
         ...createProductDto,
         categories: {
@@ -24,25 +24,91 @@ export class ProductService {
           }),
         },
       },
+      include: {
+        categories: { include: { category: { include: { parent: true } } } },
+      },
+    });
+
+    return createdProduct;
+  }
+  async findAll(page: number, itemCount: number) {
+    const productsCount = await this.databaseService.product.count();
+
+    const pageCount = Math.ceil(productsCount / itemCount);
+
+    page = Math.max(1, Math.min(page, pageCount))
+    
+    const skip = (page - 1) * itemCount
+
+    const navigation = await this.databaseService.product.findMany({
+      skip: skip,
+      take: itemCount,
       include: {categories: {include: {category: {include: {parent: true}}}}}
     });
 
-    return createdProduct
+    const nextPage = page < pageCount ? page + 1 : null
+    const previousPage = page - 1 > 0 ? page -1 : null
+
+
+    return { currentPage: page,
+      previousPage,
+      nextPage,
+      items: navigation.length,
+      navigation,
+      pageCount
+     };
   }
 
-  findAll() {
-    return `This action returns all product`;
+  async findOne(id: string) {
+    const product = await this.databaseService.product.findFirst({
+      where: { id },
+      include: {
+        categories: { include: { category: { include: { parent: true } } } },
+      },
+    });
+
+    if (!product) {
+      throw new NotFoundException();
+    }
+
+    return product;
   }
 
-  findOne(id: string): any {
-    return {}
+  async update(id: string, updateProductDto: UpdateProductDto) {
+    const productToUpdate = await this.findOne(id);
+    const upcomingCategories = updateProductDto.categories || null;
+    const categoriesWillUpdate = upcomingCategories != null;
+    let newCategories: { categoryId: string }[] = [];
+
+    if (categoriesWillUpdate) {
+      const matchCategories =
+        await this.categoryService.findAllOfManyCategories(upcomingCategories);
+
+      await this.databaseService.productInCategory.deleteMany({
+        where: { productId: productToUpdate.id },
+      });
+
+      newCategories = matchCategories.map((item) => {
+        return { categoryId: item.id };
+      });
+    }
+
+    const updatedProduct = await this.databaseService.product.update({
+      where: { id },
+      data: {
+        ...updateProductDto,
+        categories: categoriesWillUpdate
+          ? { create: newCategories }
+          : undefined,
+      },
+      include: { categories: { include: { category: true } } },
+    });
+
+    return updatedProduct;
   }
 
-  update(id: string, updateProductDto: UpdateProductDto): any {
-    return {}
-  }
-
-  remove(id: string): any {
-    return {}
+  async remove(id: string) {
+    await this.findOne(id);
+    await this.databaseService.product.delete({ where: { id } });
   }
 }
