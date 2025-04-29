@@ -30,12 +30,22 @@ const UpdateProductForm = () => {
     },
     resolver: yupResolver(updateProductSchema),
   });
+  const [categories, setCategories] = useState<string[]>([]);
 
-  const [categories, setCategories] = useState<string[]>([])
-
-  const onSubmit = (data: CreateFormValues) => {
+  useEffect(() => {
     productApi
-      .post("/", { ...data, categories })
+      .get<Product>(`/${id}`)
+      .then((res) => {
+        setOriginalProduct(res.data);
+        setCategories(res.data.categories.map((item) => item.category.name));
+      }).catch(err => {console.log(err)})
+      
+  }, []);
+
+
+  const onSubmit = (data: UpdateProductSchema) => {
+    productApi
+      .patch(`/${id}`, { ...data, categories })
       .then(() => console.log("success"))
       .catch((err) => console.log(err));
   };
