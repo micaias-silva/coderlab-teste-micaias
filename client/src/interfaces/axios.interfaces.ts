@@ -22,7 +22,7 @@ export interface Product {
 export interface ProductCategory {
     productId: string
     categoryId: string
-    category: Category[]
+    category: Category
 }
 
 export interface Category {
