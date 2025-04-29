@@ -1,7 +1,7 @@
-import { createContext, useEffect, useLayoutEffect, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 import { GetProductNavigationResponse } from "../../interfaces/axios.interfaces";
 import { productApi } from "../../utils/axios";
-import { useLocation, useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 
 interface ProductContextType {
   productResponse?: GetProductNavigationResponse;
