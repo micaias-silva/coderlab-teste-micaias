@@ -6,10 +6,11 @@ import "./style.css";
 const ProductCard = ({ id, name, price, qty, photo, categories }: Product) => {
   const navigate = useNavigate();
 
-const ProductCard = ({name, price, qty, photo, categories}: ProductCardProps) => {
-    return <li>
+  return (
+    <li id={id} className="product-card">
+      <div onClick={() => navigate(`/product/${id}`)}>
         <picture>
-            <img src={photo} />
+          <img src={photo} />
         </picture>
         <div>
             {/* <span>{...categories}</span> */}
