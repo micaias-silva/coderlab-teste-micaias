@@ -1,10 +1,8 @@
 import { useForm } from "react-hook-form";
 import { productApi } from "../../../utils/axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import InputCategory from "../InputCategory";
 import { yupResolver } from "@hookform/resolvers/yup";
-import createProductSchema from "./form.schema";
-import * as yup from "yup"
 
 type CreateFormValues = yup.InferType<typeof createProductSchema>
 
