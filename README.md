@@ -16,6 +16,22 @@ A aplicação backend instanciada pelo docker será hosperada em [http://localho
 ### Frontend
 A aplicação front instanciada pelo docker será hosperada em [http://localhost:3001](http://localhost:3001)
 
+## Tecnologias Utilizadas
+
+### Banco de Dados
+- `PostgreSQL`
+  
+### Backend
+- `Nest.js`
+- `Prisma`
+- `class-validator`
+
+### Frontend
+- `Vite`
+- `React.js`
+- `Axios`
+- `react-router-dom@v7`
+
 ## Endpoints
 ### `Product`
 
@@ -39,3 +55,6 @@ GET /category         # RETORNA TODAS AS CATEGORIAS CADASTRADAS
 /product/create        # PÁGINA CONTENDO O FORMULÁRIO DE CRIAÇÃO DE UM NOVO PRODUTO
 /product/update/:id    # PÁGINA CONTENDO O FORMULÁRIO DE ATUALIZAÇÃO DOS DADOS DE UM PRODUTO
 ```
+## Diagrama Banco de Dados
+![Diagrama](https://i.imgur.com/u52Q2Q7.jpeg)
+
