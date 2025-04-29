@@ -1,11 +1,12 @@
-import { createContext, useEffect, useState } from "react";
+import { createContext, useEffect, useLayoutEffect, useState } from "react";
 import { GetProductNavigationResponse } from "../../interfaces/axios.interfaces";
 import { productApi } from "../../utils/axios";
+import { useLocation, useSearchParams } from "react-router-dom";
 
 interface ProductContextType {
   productResponse?: GetProductNavigationResponse;
-  updateQueryParams: ({page, itemCount}: ProductQueryParamsType) => void
-  triggerProductListUpdate: () => void
+  updateQueryParams: ({ page, itemCount }: ProductQueryParamsType) => void;
+  triggerProductListUpdate: () => void;
 }
 
 type ProductQueryParamsType = {
@@ -16,17 +17,22 @@ type ProductQueryParamsType = {
 export const ProductContext = createContext<ProductContextType>({
   productResponse: undefined,
   updateQueryParams: () => {},
-  triggerProductListUpdate: () => {}
+  triggerProductListUpdate: () => {},
 });
 
 export const ProductProvider = ({ children }: React.PropsWithChildren) => {
   const [productResponse, setProductResponse] =
     useState<GetProductNavigationResponse>();
 
-  const [queryParamState, setQueryParamState] =
-    useState<ProductQueryParamsType>({ page: "1", itemCount: "20" });
+  const [searchParams] = useSearchParams();
 
-const [shouldUpdate, setShouldUpdate] = useState<boolean>(false)
+  const [queryParamState, setQueryParamState] =
+    useState<ProductQueryParamsType>({
+      page: searchParams.get("page") || "1",
+      itemCount: searchParams.get("itemCount") || "20",
+    });
+
+  const [shouldUpdate, setShouldUpdate] = useState<boolean>(false);
 
   const requestProductResponse = (page: string, itemCount: string) => {
     const queryParams = `page=${page || "1"}&itemCount=${itemCount || "20"}`;
@@ -42,26 +48,29 @@ const [shouldUpdate, setShouldUpdate] = useState<boolean>(false)
 
   const updateQueryParams = ({ page, itemCount }: ProductQueryParamsType) => {
     setQueryParamState((prevState) => ({
-        page: page || prevState.page,
-        itemCount: itemCount || prevState.itemCount,
-      }));
+      page: page || prevState.page,
+      itemCount: itemCount || prevState.itemCount,
+    }));
   };
 
   const triggerProductListUpdate = () => {
-    setShouldUpdate(prev => !prev)
-  }
+    setShouldUpdate((prev) => !prev);
+  };
 
   useEffect(() => {
-    requestProductResponse(queryParamState.page!, queryParamState.itemCount!);
+    if (searchParams.size == 0) {
+      requestProductResponse("1", "20");
+    } else {
+      requestProductResponse(queryParamState.page!, queryParamState.itemCount!);
+    }
   }, [queryParamState, shouldUpdate]);
-
 
   return (
     <ProductContext.Provider
       value={{
         productResponse,
         updateQueryParams,
-        triggerProductListUpdate
+        triggerProductListUpdate,
       }}
     >
       {children}
