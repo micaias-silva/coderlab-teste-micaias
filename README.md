@@ -31,3 +31,11 @@ DELETE /product/:id   # REMOVE UM PRODUTO DO BANCO DE DADOS
 ```Bash
 GET /category         # RETORNA TODAS AS CATEGORIAS CADASTRADAS
 ```
+## Routes (Frontend)
+
+```Bash
+/                      # PÁGINA DE EXIBIÇÃO DE TODOS OS PRODUTOS
+/product/:id           # PÁGINA DE EXIBIÇÃO DE UM PRODUTO INDIVIDUAL
+/product/create        # PÁGINA CONTENDO O FORMULÁRIO DE CRIAÇÃO DE UM NOVO PRODUTO
+/product/update/:id    # PÁGINA CONTENDO O FORMULÁRIO DE ATUALIZAÇÃO DOS DADOS DE UM PRODUTO
+```
