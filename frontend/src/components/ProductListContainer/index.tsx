@@ -36,9 +36,8 @@ const ProductListContainer = () => {
       })
       .catch((err) => {
         console.log(err);
-      }),
-      [pageParam];
-  });
+      })
+  }, [pageParam]);
 
   const HandlePaginate = (
     toPage: number,
