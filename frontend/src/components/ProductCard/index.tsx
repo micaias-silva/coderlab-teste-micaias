@@ -13,13 +13,21 @@ const ProductCard = ({ id, name, price, qty, photo, categories }: Product) => {
           <img src={photo} />
         </picture>
         <div>
-            {/* <span>{...categories}</span> */}
-            <h4 className="product-name">{name}</h4>
-            <p>{price}</p>
-            <span>{qty}</span>
-            <button>Edit</button>
+          <ul className="category-list">
+            {categories.map((item) => (
+              <li className="product-card-category">{item.category.name}</li>
+            ))}
+          </ul>
+          <h4 className="product-name">{name}</h4>
+          <p className="product-card-price">
+            {numberToCurrency(Number(price))}
+          </p>
+          <span>Units Available: {qty}</span>
         </div>
+      </div>
+      <button onClick={() => navigate(`/product/update/${id}`)}>Edit</button>
     </li>
-}
+  );
+};
 
-export default ProductCard
+export default ProductCard;
