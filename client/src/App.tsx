@@ -2,6 +2,7 @@ import { Route, Routes } from 'react-router-dom'
 import './App.css'
 import ProductListContainer from './components/ProductListContainer'
 import { CreateProductForm } from './components/Forms/CreateProductForm'
+import UpdateProductForm from './components/Forms/UpdateProductForm'
 
 function App() {
 
@@ -10,7 +11,8 @@ function App() {
     <>
       <Routes>
         <Route path='/' Component={ProductListContainer}/>
-        <Route path='/product/create' Component={CreateProductForm}/>
+        <Route path='/product/create' Component={CreateProductForm}/> 
+        <Route path='/product/update/:id' Component={UpdateProductForm}/>
       </Routes>
     </>
   )
