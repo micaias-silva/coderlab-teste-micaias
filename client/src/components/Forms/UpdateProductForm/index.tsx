@@ -16,19 +16,19 @@ const UpdateProductForm = () => {
 
   const { id } = useParams<{ id: string }>();
 
-export function CreateProductForm() {
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm({
-    defaultValues: {
-      name: "",
-      qty: 0,
-      price: 0,
-      photo: "",
+    values: {
+      name: originalProduct?.name || "",
+      photo: originalProduct?.photo || "",
+      categories: "",
+      price: Number(originalProduct?.price) || 0,
+      qty: Number(originalProduct?.price) || 0,
     },
-    resolver: yupResolver(createProductSchema)
+    resolver: yupResolver(updateProductSchema),
   });
 
   const [categories, setCategories] = useState<string[]>([])
