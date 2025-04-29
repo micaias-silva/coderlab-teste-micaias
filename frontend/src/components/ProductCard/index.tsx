@@ -3,13 +3,8 @@ import { Product } from "../../interfaces/axios.interfaces";
 import { numberToCurrency } from "../../utils/general.utils";
 import "./style.css";
 
-export interface ProductCardProps {
-    name: string,
-    qty: number,
-    price: string,
-    photo: string,
-    categories: any[]
-}
+const ProductCard = ({ id, name, price, qty, photo, categories }: Product) => {
+  const navigate = useNavigate();
 
 const ProductCard = ({name, price, qty, photo, categories}: ProductCardProps) => {
     return <li>
