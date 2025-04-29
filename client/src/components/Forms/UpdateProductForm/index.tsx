@@ -81,7 +81,6 @@ const UpdateProductForm = () => {
         {errors.price && <p>{errors.price.message}</p>}
       </div>
 
-
       <div>
         <label htmlFor="photo">Photo Url:</label>
         <input type="text" {...register("photo")} />
@@ -89,10 +88,16 @@ const UpdateProductForm = () => {
       </div>
 
       <div>
-        <InputCategory setCategoriesState={setCategories} {...register("categories")}/>
+        <InputCategory
+          categoriesState={categories}
+          setCategoriesState={setCategories}
+          {...{name: "categories"}}
+        />
       </div>
       {errors.categories && <p>{errors.categories.message}</p>}
-      <button type="submit">Create Product</button>
+      <button type="submit">Update Product</button>
     </form>
   );
-}
+};
+
+export default UpdateProductForm;
