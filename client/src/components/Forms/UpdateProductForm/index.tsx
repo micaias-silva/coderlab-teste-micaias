@@ -4,7 +4,17 @@ import { useEffect, useState } from "react";
 import InputCategory from "../InputCategory";
 import { yupResolver } from "@hookform/resolvers/yup";
 
-type CreateFormValues = yup.InferType<typeof createProductSchema>
+import * as yup from "yup";
+import updateProductSchema from "./form.schema";
+import { useParams } from "react-router-dom";
+import { Product } from "../../../interfaces/axios.interfaces";
+
+type UpdateProductSchema = yup.InferType<typeof updateProductSchema>;
+
+const UpdateProductForm = () => {
+  const [originalProduct, setOriginalProduct] = useState<Product>();
+
+  const { id } = useParams<{ id: string }>();
 
 export function CreateProductForm() {
   const {
