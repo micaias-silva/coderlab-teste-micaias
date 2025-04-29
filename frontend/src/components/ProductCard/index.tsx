@@ -1,3 +1,7 @@
+import { useNavigate } from "react-router-dom";
+import { Product } from "../../interfaces/axios.interfaces";
+import { numberToCurrency } from "../../utils/general.utils";
+import "./style.css";
 
 export interface ProductCardProps {
     name: string,
