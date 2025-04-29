@@ -1,10 +1,8 @@
 import { productApi } from "../../utils/axios";
 import { GetProductNavigationResponse } from "../../interfaces/axios.interfaces";
 import { useEffect, useState } from "react";
-import { AxiosResponse } from "axios";
 import ProductList from "../ProductList";
 import {
-  Link,
   useLocation,
   useNavigate,
   useSearchParams,

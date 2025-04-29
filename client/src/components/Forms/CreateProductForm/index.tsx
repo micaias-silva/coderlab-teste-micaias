@@ -4,9 +4,9 @@ import { useState } from "react";
 import InputCategory from "../InputCategory";
 import { yupResolver } from "@hookform/resolvers/yup";
 import createProductSchema from "./form.schema";
-import * as yup from "yup"
+import * as yup from "yup";
 
-type CreateFormValues = yup.InferType<typeof createProductSchema>
+type CreateFormValues = yup.InferType<typeof createProductSchema>;
 
 export function CreateProductForm() {
   const {
@@ -20,10 +20,10 @@ export function CreateProductForm() {
       price: 0,
       photo: "",
     },
-    resolver: yupResolver(createProductSchema)
+    resolver: yupResolver(createProductSchema),
   });
 
-  const [categories, setCategories] = useState<string[]>([])
+  const [categories, setCategories] = useState<string[]>([]);
 
   const onSubmit = (data: CreateFormValues) => {
     productApi
@@ -63,7 +63,6 @@ export function CreateProductForm() {
         {errors.price && <p>{errors.price.message}</p>}
       </div>
 
-
       <div>
         <label htmlFor="photo">Photo Url:</label>
         <input type="text" {...register("photo")} />
@@ -71,7 +70,11 @@ export function CreateProductForm() {
       </div>
 
       <div>
-        <InputCategory setCategoriesState={setCategories} {...register("categories")}/>
+        <InputCategory
+          categoriesState={categories}
+          setCategoriesState={setCategories}
+          {...{name: "categories"}}
+        />
       </div>
       {errors.categories && <p>{errors.categories.message}</p>}
       <button type="submit">Create Product</button>
