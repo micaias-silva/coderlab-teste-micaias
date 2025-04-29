@@ -3,10 +3,9 @@
     text-decoration: none;
     background-color: #fff;
     box-sizing: border-box;
-    display: block;
-    min-width: 250px;
-    max-width: 300px;
-    margin: 0.75rem;
+    display: inline-block;
+    width: 225px;
+    margin: .25rem;
     padding: 1.5rem;
     border-radius: 10px;
     cursor: pointer;
@@ -31,6 +30,7 @@
     flex-direction: row;
     width: 100%;
     gap: 0.25rem;
+    flex-wrap: wrap;
 }
 
 .product-card-category {
