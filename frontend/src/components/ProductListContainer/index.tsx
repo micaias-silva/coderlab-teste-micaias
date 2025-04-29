@@ -8,6 +8,7 @@ import {
   useSearchParams,
 } from "react-router-dom";
 import { generateNumbersAround } from "../../utils/general.utils";
+import "./style.css"
 
 const ProductListContainer = () => {
   const [response, setResponse] = useState<GetProductNavigationResponse>();
@@ -61,7 +62,7 @@ const ProductListContainer = () => {
   return (
     <div>
       {response && (
-        <>
+        <div className="product-list-container">
           <ProductList products={response.navigation} />
           <div className="page-list-container">
             {calculateSurroudingPages().map((pageNumber) => {
@@ -80,7 +81,7 @@ const ProductListContainer = () => {
               );
             })}
           </div>
-        </>
+        </div>
       )}
     </div>
   );

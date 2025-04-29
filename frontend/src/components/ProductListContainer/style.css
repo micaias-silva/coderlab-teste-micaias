@@ -1,0 +1,16 @@
+.product-list-container {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.product-list-container .page-list-container {
+    align-self: center;
+    display: flex;
+    width: 100%;
+    max-width: 1024px;
+    justify-content: center;
+    gap: 0.25rem;
+}

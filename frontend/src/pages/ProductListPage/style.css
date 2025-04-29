@@ -1,0 +1,13 @@
+.product-list-page-header {
+    height: 60px;
+    width: 100%;
+    background-color: white;
+    display: flex;
+    justify-content: center;
+}
+
+.product-list-page-header .header-container {
+    max-width: 1024px;
+    width: 100%;
+    align-self: center;
+}

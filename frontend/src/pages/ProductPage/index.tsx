@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { Product } from "../../interfaces/axios.interfaces";
 import { productApi } from "../../utils/axios";
+import { numberToCurrency } from "../../utils/general.utils";
 
 const ProductPage = () => {
   const { id } = useParams();
@@ -33,10 +34,7 @@ const ProductPage = () => {
             <img src={product.photo} width={200} height={200} />
           </picture>
           <p>
-            {new Intl.NumberFormat("pt-BR", {
-              style: "currency",
-              currency: "BRL",
-            }).format(Number(product.price))}
+            {numberToCurrency(Number(product.price))}
           </p>
           <button onClick={() => {
             navigate(`/product/update/${id}`)
