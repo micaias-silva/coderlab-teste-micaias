@@ -1,5 +1,8 @@
 Repositório destinado ao teste técnico da Coder Lab, disponibilizando um CRUD no backend da aplicação com `nest.js` e o implementando no frontend com `react.js`
 
+# Importante
+Devido à situação de incompletude do frontend, informada no e-mail enviado, continuei desenvolvendo as partes imcompletas do projeto em uma branch separada chamada ```postDeadLine/Development```, onde se encontrarão as atualizações. Caso esta branch possa ser considerada para avaliação do teste técnico, basta utilizá-la como base: todas as atualizações mais recentes estão concentradas nela.
+
 # Instalação e iniciação do repositório
 ```Bash
 docker compose up
