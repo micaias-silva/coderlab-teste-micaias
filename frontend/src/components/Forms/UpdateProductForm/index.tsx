@@ -15,6 +15,7 @@ const UpdateProductForm = () => {
   const [originalProduct, setOriginalProduct] = useState<Product>();
 
   const { id } = useParams<{ id: string }>();
+  const [notFoundState, setNotFoundState] = useState(false);
 
   const {
     register,
@@ -38,10 +39,12 @@ const UpdateProductForm = () => {
       .then((res) => {
         setOriginalProduct(res.data);
         setCategories(res.data.categories.map((item) => item.category.name));
-      }).catch(err => {console.log(err)})
-      
+      })
+      .catch((err) => {
+        console.log(err);
+        setNotFoundState(true);
+      });
   }, []);
-
 
   const onSubmit = (data: UpdateProductSchema) => {
     productApi
@@ -50,7 +53,7 @@ const UpdateProductForm = () => {
       .catch((err) => console.log(err));
   };
 
-  return (
+  return !notFoundState ? (
     <form onSubmit={handleSubmit(onSubmit)}>
       <div>
         <label htmlFor="name">Nome do Produto</label>
@@ -91,12 +94,14 @@ const UpdateProductForm = () => {
         <InputCategory
           categoriesState={categories}
           setCategoriesState={setCategories}
-          {...{name: "categories"}}
+          {...{ name: "categories" }}
         />
       </div>
       {errors.categories && <p>{errors.categories.message}</p>}
       <button type="submit">Update Product</button>
     </form>
+  ) : (
+    <h2>Product not found</h2>
   );
 };
 
