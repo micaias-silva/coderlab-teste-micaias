@@ -1,5 +1,5 @@
 import {
-    Dispatch,
+  Dispatch,
   InputHTMLAttributes,
   SetStateAction,
   useEffect,
@@ -9,11 +9,13 @@ import { Category } from "../../../interfaces/axios.interfaces";
 import { categoryApi } from "../../../utils/axios";
 
 interface InputCategoryProps {
-  setCategoriesState: Dispatch<SetStateAction<string[]>>
+  categoriesState: string[];
+  setCategoriesState: Dispatch<SetStateAction<string[]>>;
   props?: InputHTMLAttributes<HTMLInputElement>;
 }
 
 const InputCategory = ({
+  categoriesState,
   setCategoriesState,
   props,
 }: InputCategoryProps) => {
@@ -22,13 +24,18 @@ const InputCategory = ({
   >([]);
   const [inputValue, setInputValue] = useState("");
   const [filterResults, setFilterResults] = useState<Category[]>([]);
-  const [selectedCategoryList, setSelectedCategoryList] = useState<string[]>(
-    []
-  );
+//   const [selectedCategoryList, setSelectedCategoryList] = useState<string[]>(
+//     []
+//   );
+  
+//   useEffect(() => {
+//     setSelectedCategoryList(categoriesState)
+//   }, [categoriesState])
+  
+//   useEffect(() => {
+//     setCategoriesState(selectedCategoryList);
+//   }, [selectedCategoryList]);
 
-  useEffect(() => {
-    setCategoriesState(selectedCategoryList)
-  }, [selectedCategoryList])
 
   useEffect(() => {
     const stopTypingTimeout = setTimeout(() => {
@@ -42,7 +49,7 @@ const InputCategory = ({
 
     return () => clearTimeout(stopTypingTimeout);
   }, [inputValue]);
-  
+
   useEffect(() => {
     categoryApi.get<Category[]>("/").then((res) => {
       setRetrievedCategoryList(res.data);
@@ -54,14 +61,13 @@ const InputCategory = ({
       retrievedCategoryList.some(
         (item) => item.name.toLowerCase() == inputValue.toLowerCase()
       ) &&
-      !selectedCategoryList.includes(inputValue)
+      !categoriesState.includes(inputValue)
     ) {
-      setSelectedCategoryList([...selectedCategoryList, inputValue]);
+      setCategoriesState([...categoriesState, inputValue]);
       e.currentTarget.value = "";
       setInputValue("");
     }
   };
-
 
   return (
     <div>
@@ -93,7 +99,7 @@ const InputCategory = ({
         }}
       />
       <div className="selected-categories-line">
-        {selectedCategoryList.map((item) => (
+        {categoriesState.map((item) => (
           <span>{item}</span>
         ))}
       </div>
