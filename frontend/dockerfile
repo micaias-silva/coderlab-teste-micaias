@@ -1,0 +1,13 @@
+FROM node:22.15-alpine
+
+COPY package*.json .
+
+WORKDIR /app/frontend
+
+RUN npm i
+
+COPY . .
+
+EXPOSE 5173
+
+CMD ["npm", "run", "dev"]

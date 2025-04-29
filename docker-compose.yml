@@ -1,0 +1,35 @@
+
+services:
+  postgres:
+    container_name: micaias_postgre_sql
+    image: postgres:17.4-alpine
+    restart: always
+    ports: 
+      - "5432:5432"
+
+    env_file:
+      - ./backend/.env
+
+  backend_server:
+    container_name: micaias_backend_server
+    build: ./backend
+    ports:
+      - 3000:3000
+
+    depends_on:
+      - postgres
+
+    volumes:
+      - .:/app:rw
+
+    command: ["sh", "-c", "npx prisma migrate deploy && npx prisma generate && npm run start:dev"]
+  
+  frontend_client:
+    container_name: micaias_frontend_client
+    build: ./frontend
+    image: frontend_client
+    ports:
+      - 3001:5173
+
+    volumes:
+      - .:/app
